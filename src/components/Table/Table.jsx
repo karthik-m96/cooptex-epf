@@ -16,7 +16,7 @@ const Table = () => {
   }, [epf]);
   return (
     <div>
-      <h1>EPF</h1>
+      
       {epf.map((item) => {
         return (
           <div key={item.s_no}>
