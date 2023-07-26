@@ -16,6 +16,7 @@ const Form = () => {
       <div className="form">
         <div className="logo">
           <img src={logo} alt="" />
+          <h2>Cooptex EPF Master</h2>
         </div>
         <form className="form-container" onSubmit={handleSubmit}>
           <div className="form-uan">

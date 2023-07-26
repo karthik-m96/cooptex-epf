@@ -1,18 +1,20 @@
 import "./App.css";
 import Table from "./components/Wages/Wages";
 import Form from "./components/Form/Form";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 
 const App = () => {
+  const router = createBrowserRouter([
+    { path: "/", element: <Form /> },
+    { path: "/epf", element: <Table /> },
+  ]);
   return (
-    <Router>
+    <RouterProvider router={router}>
       <div className="App">
-        <Routes>
-          <Route path="/" element={<Form />} />
-          <Route path="/epf" element={<Table />} />
-        </Routes>
+        <Route path="/" element={<Form />} />
+        <Route path="/epf" element={<Table />} />
       </div>
-    </Router>
+    </RouterProvider>
   );
 };
 
