@@ -18,10 +18,6 @@ const Form = () => {
           <img src={logo} alt="" />
         </div>
         <form className="form-container" onSubmit={handleSubmit}>
-          <div className="form-name">
-            <label htmlFor="name">Employee Name: </label> <br />
-            <input type="text" id="name" />
-          </div>
           <div className="form-uan">
             <label htmlFor="uan">Enter the PF number: </label> <br />
             <input type="text" id="uan" />
