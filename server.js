@@ -1,5 +1,4 @@
 const express = require("express");
-const url = require("url");
 const mysql = require("mysql");
 const cors = require("cors");
 require("dotenv").config();
