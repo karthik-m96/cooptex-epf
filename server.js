@@ -20,10 +20,8 @@ const listener = app.listen(process.env.PORT || 3001, () => {
 });
 
 app.get("/epf", (req, res) => {
-  const query = url.parse(req.url, true).query.query;
-  const sql = "SELECT * FROM feb2017 WHERE uan = ?";
-  const params = [query];
-  db.query(sql, params, (err, result) => {
+  const sql = "SELECT * FROM feb2017";
+  db.query(sql, (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");

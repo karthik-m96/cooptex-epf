@@ -1,19 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import logo from "../../assets/cooptex.png";
 import "./Form.scss";
 import { useNavigate } from "react-router-dom";
 
 const Form = () => {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/epf?query=${searchQuery}`);
-  };
-
-  const handleInputChange = (e) => {
-    setSearchQuery(e.target.value);
+    navigate("/epf");
   };
 
   return (
@@ -29,10 +24,7 @@ const Form = () => {
             <input
               type="text"
               id="uan"
-              name="query"
               placeholder="PF number to search"
-              value={searchQuery}
-              onChange={handleInputChange}
               required
             />
           </div>
