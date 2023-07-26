@@ -7,7 +7,7 @@ const Wages = () => {
   const [epf, setEpf] = useState([]);
 
   const getEpf = () => {
-    axios.get("http://localhost:3000/epf").then((res) => {
+    axios.get("http://localhost:3001/epf").then((res) => {
       setEpf(res.data);
     });
   };

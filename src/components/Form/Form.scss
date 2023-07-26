@@ -41,6 +41,10 @@
         padding: 7px;
         line-height: 30px;
         color: black;
+
+        &::placeholder {
+          color: rgb(81, 81, 81);
+        }
       }
 
       .form-name,
