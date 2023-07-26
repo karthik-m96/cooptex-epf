@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import logo from "../../assets/cooptex.png"
+import React from "react";
+import logo from "../../assets/cooptex.png";
 import "./Form.scss";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
-  const [name, setName] = useState("");
-  const [pfNumber, setPfNumber] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Name:", name);
-    console.log("PF Number:", pfNumber);
+    navigate("/epf");
   };
 
   return (
@@ -21,21 +20,11 @@ const Form = () => {
         <form className="form-container" onSubmit={handleSubmit}>
           <div className="form-name">
             <label htmlFor="name">Employee Name: </label> <br />
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <input type="text" id="name" />
           </div>
           <div className="form-uan">
             <label htmlFor="uan">Enter the PF number: </label> <br />
-            <input
-              type="text"
-              id="uan"
-              value={pfNumber}
-              onChange={(e) => setPfNumber(e.target.value)}
-            />
+            <input type="text" id="uan" />
           </div>
           <div className="form-submit">
             <button type="submit">Submit</button>
