@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useState } from "react";
 import logo from "../../assets/cooptex.png";
 import "./Form.scss";
 import { useNavigate } from "react-router-dom";
@@ -6,9 +6,12 @@ import { useNavigate } from "react-router-dom";
 const Form = () => {
   const navigate = useNavigate();
 
+  const [inputData, setInputData] = useState('')
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate("/epf");
+    navigate(`/epf/${inputData}`);
+
   };
 
   return (
@@ -24,7 +27,10 @@ const Form = () => {
             <input
               type="text"
               id="uan"
+              name="uan_no"
+              value={inputData}
               placeholder="PF number to search"
+              onChange={(e) => setInputData(e.target.value)}
               required
             />
           </div>

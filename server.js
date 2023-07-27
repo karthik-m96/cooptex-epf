@@ -7,7 +7,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const db = mysql.createPool({
+const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -18,13 +18,14 @@ const listener = app.listen(process.env.PORT || 3001, () => {
   console.log("App is listening on port " + listener.address().port);
 });
 
-app.get("/epf", (req, res) => {
-  const sql = "SELECT * FROM feb2017";
-  db.query(sql, (err, result) => {
+app.get("/epf/:uan", (req, res) => {
+  console.log(req.params)
+  const sqlQuery = `SELECT * FROM feb2017 where uan = '${req.params.uan}'`;
+  db.query(sqlQuery, (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");
-    } else {
+    } else { 
       res.send(result);
     }
   });
