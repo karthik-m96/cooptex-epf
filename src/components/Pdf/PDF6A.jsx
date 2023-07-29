@@ -138,7 +138,7 @@ const PDF6A = () => {
   };
 
   const downloadPdf = () => {
-    pdfMake.createPdf(pdf).download("epf data.pdf");
+    pdfMake.createPdf(pdf).download("Form 6A.pdf");
   };
 
   return (

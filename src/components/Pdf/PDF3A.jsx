@@ -118,7 +118,7 @@ const PDF3A = () => {
   };
 
   const downloadPdf = () => {
-    pdfMake.createPdf(pdf).download("epf data.pdf");
+    pdfMake.createPdf(pdf).download("Form 3A.pdf");
   };
 
   return (
