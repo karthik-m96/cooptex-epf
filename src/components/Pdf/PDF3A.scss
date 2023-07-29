@@ -1,13 +1,14 @@
 button {
-  background: white;
-  border: solid 2px black;
+  background: #FCBAAD;
+  color: black;
+  border: none;
   padding: 10px 20px;
   font-size: 15px;
   border-radius: 25px;
   cursor: pointer;
 
   &:hover {
-    background: black;
-    color: white;
+    background: #8CC0DE;
+    color: #FAF0D7;
   }
 }
