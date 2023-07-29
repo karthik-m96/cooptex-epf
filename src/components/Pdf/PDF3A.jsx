@@ -1,4 +1,5 @@
 import React from "react";
+import "./PDF3A.scss"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -121,9 +122,9 @@ const PdfCreate = () => {
   };
 
   return (
-    <div className="pdf-create">
+    <div className="container">
       <div>
-        <button onClick={downloadPdf}>Download PDF</button>
+        <button className="button-arounder" onClick={downloadPdf}>Download Form 3A</button>
       </div>
     </div>
   );

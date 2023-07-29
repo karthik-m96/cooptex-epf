@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Wages.scss";
 import { useParams } from "react-router-dom";
-import PdfCreate from "../../pdfCreate";
+import PdfCreate from "../Pdf/PDF3A";
 
 const Wages = () => {
   const [epf, setEpf] = useState([]);
