@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Wages.scss";
 import { useParams } from "react-router-dom";
-import PdfCreate from "../Pdf/PDF3A";
+import PDF3A from "../Pdf/PDF3A";
+import PDF6A from "../Pdf/PDF6A";
 
 const Wages = () => {
   const [epf, setEpf] = useState([]);
@@ -23,7 +24,14 @@ const Wages = () => {
   return (
     <div className="wages">
       <h1>Cooptex EPF</h1>
-      <PdfCreate />
+      <div className="btn">
+        <div >
+          <PDF3A />
+        </div>
+        <div >
+          <PDF6A />
+        </div>
+      </div>
       <div className="table">
         <table>
           <thead>

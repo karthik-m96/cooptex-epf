@@ -4,7 +4,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const PdfCreate = () => {
+const PDF3A = () => {
   const pdf = {
     content: [
       { text: "(FORM 3-A Revised)", style: "header" },
@@ -122,7 +122,7 @@ const PdfCreate = () => {
   };
 
   return (
-    <div className="container">
+    <div className="pdf3a-container">
       <div>
         <button className="button-arounder" onClick={downloadPdf}>Download Form 3A</button>
       </div>
@@ -130,4 +130,4 @@ const PdfCreate = () => {
   );
 };
 
-export default PdfCreate;
+export default PDF3A;
