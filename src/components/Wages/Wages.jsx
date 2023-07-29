@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Wages.scss";
 import { useParams } from "react-router-dom";
-import {createExcel} from "../excel";
+import PdfCreate from "../../pdfCreate";
 
 const Wages = () => {
   const [epf, setEpf] = useState([]);
@@ -23,7 +23,7 @@ const Wages = () => {
   return (
     <div className="wages">
       <h1>Cooptex EPF</h1>
-      <button onClick={() => createExcel()}>Export Excel</button>
+      <PdfCreate />
       <div className="table">
         <table>
           <thead>
