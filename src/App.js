@@ -1,4 +1,3 @@
-import "./App.css";
 import Wages from "./components/Wages/Wages";
 import Form from "./components/Form/Form";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
@@ -6,7 +5,7 @@ import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 const App = () => {
   const router = createBrowserRouter([
     { path: "/", element: <Form /> },
-    { path: `/epf/:uan`, element: <Wages /> },
+    { path: "/epf/:uan", element: <Wages /> },
   ]);
   return (
     <RouterProvider router={router}>
