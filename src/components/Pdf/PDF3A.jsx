@@ -22,7 +22,7 @@ const PDF3A = (props) => {
   };
 
   let pdfPrintableContent = [];
-  const { periodFrom, periodTo, accountNumber, fatherName, columns, firstName, husbandName, lastName, tableData, fileName } = pdfData;
+  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, lastName, tableData, fileName } = pdfData;
 
   // !Header Content Definition
   const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
