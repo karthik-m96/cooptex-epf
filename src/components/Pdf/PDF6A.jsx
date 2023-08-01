@@ -4,7 +4,7 @@ import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-const PDF6A = () => {
+const PDF6A = (props) => {
   const pdf = {
     content: [
       { text: "(FORM 6-A)", style: "header" },
@@ -13,7 +13,7 @@ const PDF6A = () => {
         style: "header",
       },
       {
-        text: "THE EMPOLYEE PROVIDENT FUND SCHEME 1952 EMPLOYEE SHCEME 1995.",
+        text: "THE EMPOLYEE PROVIDENT FUND SCHEME 1952 EMPLOYEE SCHEME 1995.",
         style: "header",
         margin: [10, 10, 10, 0],
       },
@@ -27,9 +27,9 @@ const PDF6A = () => {
         table: {
           body: [
             [
-              { text: "PF NO : TN/MAS/2839/ ", style: "tableheader" },
+              { text: `PF NO : TN/MAS/2839/${props.uan}`, style: "tableheader" },
               {
-                text: "NAME:",
+                text:`NAME: ${props.name}`,
                 style: "tableheader",
                 margin: [70, 5, 0, 0],
               },
@@ -62,38 +62,9 @@ const PDF6A = () => {
               "",
             ],
             [
-              "",
-              "1",
-              "2",
-              "3 \n2x10/12",
-              "4 (a) \n3-4(b)",
-              "4(b) \n 2 x 8.33%",
-              "5",
-              "6\n4 (b) - 5",
-            ],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
-            ["", "", "", "", "", "", "", " "],
+              "", "1", "2", "3 \n2x10/12", "4 (a) \n3-4(b)", "4(b) \n 2 x 8.33%", "5", "6\n4 (b) - 5",],
+            ["", "", `${props.wages}`, "", "", "", "", " "],
+
           ],
         },
         margin: [10, 10, 10, 10],
@@ -138,11 +109,11 @@ const PDF6A = () => {
   };
 
   const downloadPdf = () => {
-    pdfMake.createPdf(pdf).download("Form 6A.pdf");
+    pdfMake.createPdf(pdf).download(`${props.uan} Form 6A`);
   };
 
   return (
-<div className="pdf6a-container">
+    <div className="pdf6a-container">
       <div>
         <button className="button-arounder" onClick={downloadPdf}>Download Form 6A</button>
       </div>

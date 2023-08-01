@@ -26,14 +26,17 @@ const Wages = () => {
     <div className="wages">
       <h1>Cooptex EPF</h1>
       <div className="btn">
-        {epf.length > 0 && 
+        {epf.length > 0 &&
           <div>
             <PDF3A uan={params.uan} name={epf[0].name} wages={epf[0].wages} employer_share={epf[0].employer_share} />
           </div>
         }
-        <div>
-          <PDF6A />
-        </div>
+        {epf.length > 0 &&
+          <div>
+            <PDF6A uan={params.uan} name={epf[0].name} wages={epf[0].wages} />
+          </div>
+        }
+
       </div>
       <div className="table">
         {epf.length > 0 &&
