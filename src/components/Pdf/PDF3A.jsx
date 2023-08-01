@@ -16,9 +16,9 @@ const PDF3A = (props) => {
     lastName: "",
     fatherName: "",
     husbandName: "",
-    columns: ['Month', 'Workers Share EPF', 'Employers Share', 'Difference Amount Amount already remitted', 'Remarks'],
+   
     tableData: [["100", "100", "100", "100", "100", "100", "100", "100"]],
-    fileName: "", 
+    fileName: "",
   };
 
   let pdfPrintableContent = [];
@@ -96,16 +96,15 @@ const PDF3A = (props) => {
 
   // !Define table columns and append table data
 
-  const tableColumns = columns.map((col) => ({ rowSpan: 2, text: col }))
-
   const tableDef = {
     table: {
-      body: [tableColumns,  
-      ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', '', ''],
-      ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
-      ...tableData
-    ]
-    }, margin: [10, 10, 10, 10]
+      body: [
+        [{rowSpan: 2, text:'Month'},{rowSpan: 2, text:'Amount of Wages'}, {rowSpan: 2, text:'Workers Share EPF'}, {colSpan: 2, text:'Employers Share'},'',{rowSpan: 2, text:'Difference Amount'},{rowSpan: 2, text:'Amount already remitted'},{rowSpan: 2, text:'Remarks'}],
+        ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
+        ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
+        ...tableData
+      ]
+    }, margin: [10, 10, 10, 10], alignment: 'center',
   };
 
   pdfPrintableContent.push(tableDef);
@@ -124,7 +123,7 @@ const PDF3A = (props) => {
 
   //!Create the pdf print object 
   // Collate the styles 
-  const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.FORM3A.styles};
+  const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.FORM3A.styles };
 
   const downloadPdf = () => {
     pdfMake.createPdf(pdfToPrint).download(fileName);

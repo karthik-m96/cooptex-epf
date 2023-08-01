@@ -19,7 +19,6 @@ const listener = app.listen(process.env.PORT || 3001, () => {
 });
 
 app.get("/epf/:uan", (req, res) => {
-  console.log(req.params)
   const sqlQuery = `SELECT * FROM feb2017 where uan = '${req.params.uan}'`;
   db.query(sqlQuery, (err, result) => {
     if (err) {
