@@ -7,22 +7,22 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF3A = (props) => {
 
+  console.log(props.uan)
   //TODO: Append the pdf data from props
   const pdfData = {
     periodFrom: "1st April 1995",
     periodTo: "31st March 1996",
-    accountNumber: "TN/2839/",
-    firstName: "",
-    lastName: "",
-    fatherName: "",
+    accountNumber: `TN/2839/${props.uan}`,
+    firstName: `${props.name}`,
+    fatherName: ``,
     husbandName: "",
-   
-    tableData: [["100", "100", "100", "100", "100", "100", "100", "100"]],
-    fileName: "",
+
+    tableData: [["100", `${props.wages}`,  "100", `${props.employer_share}`,"100", "100", "100", "100"]],
+    fileName: `${props.uan} Form 3A`,
   };
 
   let pdfPrintableContent = [];
-  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, lastName, tableData, fileName } = pdfData;
+  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, tableData, fileName } = pdfData;
 
   // !Header Content Definition
   const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
@@ -61,7 +61,7 @@ const PDF3A = (props) => {
     table: {
       body: [
         ["1.ACCOUNT NO.", ":", `${accountNumber}`],
-        ["2.NAME/SURNAME", ":", `${firstName || lastName}`],
+        ["2.NAME/SURNAME", ":", `${firstName}`],
         ["3.Father's or Husband's Name", ":", `${fatherName || husbandName}`],
         [
           "4.Name and Address of the Establishment",
@@ -99,7 +99,7 @@ const PDF3A = (props) => {
   const tableDef = {
     table: {
       body: [
-        [{rowSpan: 2, text:'Month'},{rowSpan: 2, text:'Amount of Wages'}, {rowSpan: 2, text:'Workers Share EPF'}, {colSpan: 2, text:'Employers Share'},'',{rowSpan: 2, text:'Difference Amount'},{rowSpan: 2, text:'Amount already remitted'},{rowSpan: 2, text:'Remarks'}],
+        [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
         ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
         ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
         ...tableData

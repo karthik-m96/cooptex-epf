@@ -14,6 +14,7 @@ const Wages = () => {
   const getEpf = () => {
     axios.get(`http://localhost:3001/epf/${params.uan}`).then((res) => {
       setEpf(res.data);
+      console.log(res.data.name)
     });
   };
 
@@ -25,34 +26,40 @@ const Wages = () => {
     <div className="wages">
       <h1>Cooptex EPF</h1>
       <div className="btn">
-        <div >
-          <PDF3A />
-        </div>
-        <div >
+        {epf.length > 0 && 
+          <div>
+            <PDF3A uan={params.uan} name={epf[0].name} wages={epf[0].wages} employer_share={epf[0].employer_share} />
+          </div>
+        }
+        <div>
           <PDF6A />
         </div>
       </div>
       <div className="table">
-        <table>
-          <thead>
-            <tr>
-              <th>S. No</th>
-              <th>UAN No</th>
-              <th>Name</th>
-              <th>Wages</th>
-            </tr>
-          </thead>
-          <tbody>
-            {epf.map((item, index) => (
-              <tr key={item.s_no}>
-                <td>{index + 1}</td>
-                <td>{item.uan}</td>
-                <td>{item.name}</td>
-                <td>{item.wages}</td>
+        {epf.length > 0 &&
+          <table>
+            <thead>
+              <tr>
+                <th>S. No</th>
+                <th>UAN No</th>
+                <th>Name</th>
+                <th>Wages</th>
+                <th>Employer Share</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {epf.map((item, index) => (
+                <tr key={item.s_no}>
+                  <td>{index + 1}</td>
+                  <td>{item.uan}</td>
+                  <td>{item.name}</td>
+                  <td>{item.wages}</td>
+                  <td>{item.employer_share}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        }
       </div>
     </div>
   );
