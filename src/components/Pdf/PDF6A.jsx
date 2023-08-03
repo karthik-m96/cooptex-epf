@@ -1,10 +1,18 @@
 import React from "react";
 import "./PDF6A.scss";
+import PropTypes from "prop-types"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF6A = (props) => {
+
+  const { tableData } = props;
+  const { name, uan } = tableData[0]
+  const tableDataSource = tableData.map(({years, month,wages, work_share, epf_diff_amount, pen_contr, difference_amount}) => {
+    return [null,month,wages, work_share, epf_diff_amount, pen_contr, difference_amount, pen_contr-difference_amount]
+   });
+
   const pdf = {
     content: [
       { text: "(FORM 6-A)", style: "header" },
@@ -27,9 +35,9 @@ const PDF6A = (props) => {
         table: {
           body: [
             [
-              { text: `PF NO : TN/MAS/2839/${props.uan}`, style: "tableheader" },
+              { text: `PF NO : TN/MAS/2839/${uan}`, style: "tableheader" },
               {
-                text:`NAME: ${props.name}`,
+                text: `NAME: ${name}`,
                 style: "tableheader",
                 margin: [70, 5, 0, 0],
               },
@@ -61,9 +69,8 @@ const PDF6A = (props) => {
               "Pension Fund Contribution 8.33%",
               "",
             ],
-            [
-              "", "1", "2", "3 \n2x10/12", "4 (a) \n3-4(b)", "4(b) \n 2 x 8.33%", "5", "6\n4 (b) - 5",],
-            ["", "", `${props.wages}`, "", "", "", "", " "],
+            ["", "1", "2", "3 \n2x10/12", "4 (a) \n3-4(b)", "4(b) \n 2 x 8.33%", "5", "6\n4 (b) - 5",],
+            ...tableDataSource,
 
           ],
         },
@@ -109,7 +116,7 @@ const PDF6A = (props) => {
   };
 
   const downloadPdf = () => {
-    pdfMake.createPdf(pdf).download(`${props.uan} Form 6A`);
+    pdfMake.createPdf(pdf).download(`${uan} Form 6A`);
   };
 
   return (
@@ -122,3 +129,8 @@ const PDF6A = (props) => {
 };
 
 export default PDF6A;
+
+
+PDF6A.propTypes = {
+  tableData: PropTypes.array.isRequired
+}

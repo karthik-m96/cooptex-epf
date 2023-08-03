@@ -22,7 +22,7 @@ const PDF3A = (props) => {
     fileName: `${uan} Form 3A`,
   };
   const tableDataSource = tableData.map(({month, wages, work_share, epf_diff_amount, pen_contr, difference_amount}) => {
-   return [month, wages, work_share, epf_diff_amount, pen_contr, difference_amount, null,null]
+   return [month, wages, work_share, epf_diff_amount, pen_contr, difference_amount, pen_contr-difference_amount,null]
   });
   let pdfPrintableContent = [];
   const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, fileName } = pdfData;

@@ -35,7 +35,7 @@ const Wages = () => {
         }
         {epf.length > 0 &&
           <div>
-            <PDF6A uan={params.uan} name={epf[0].name} wages={epf[0].wages} />
+            <PDF6A tableData={epf} />
           </div>
         }
 
