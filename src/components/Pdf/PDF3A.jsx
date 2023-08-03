@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types"
 import "./PDF3A.scss"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -7,22 +8,24 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF3A = (props) => {
 
-  console.log(props.uan)
+  const {tableData} = props;
+  const {name, uan} = tableData[0]
+
   //TODO: Append the pdf data from props
   const pdfData = {
     periodFrom: "1st April 1995",
     periodTo: "31st March 1996",
-    accountNumber: `TN/2839/${props.uan}`,
-    firstName: `${props.name}`,
+    accountNumber: `TN/2839/${uan}`,
+    firstName: `${name}`,
     fatherName: ``,
     husbandName: "",
-
-    tableData: [["100", `${props.wages}`,  "100", `${props.employer_share}`,"100", "100", "100", "100"]],
-    fileName: `${props.uan} Form 3A`,
+    fileName: `${uan} Form 3A`,
   };
-
+  const tableDataSource = tableData.map(({month, wages, work_share, epf_diff_amount, pen_contr, difference_amount}) => {
+   return [month, wages, work_share, epf_diff_amount, pen_contr, difference_amount, null,null]
+  });
   let pdfPrintableContent = [];
-  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, tableData, fileName } = pdfData;
+  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, fileName } = pdfData;
 
   // !Header Content Definition
   const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
@@ -102,7 +105,7 @@ const PDF3A = (props) => {
         [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
         ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
         ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
-        ...tableData
+        ...tableDataSource
       ]
     }, margin: [10, 10, 10, 10], alignment: 'center',
   };
@@ -139,3 +142,9 @@ const PDF3A = (props) => {
 };
 
 export default PDF3A;
+
+PDF3A.propTypes = {
+  tableData : PropTypes.array.isRequired
+}
+
+// month, wages, work_share, epf_diff_amount, pen_contr, difference_amount

@@ -14,12 +14,14 @@ const Wages = () => {
   const getEpf = () => {
     axios.get(`http://localhost:3001/epf/${params.uan}`).then((res) => {
       setEpf(res.data);
+      debugger
       console.log(res.data.name)
     });
   };
 
   useEffect(() => {
     getEpf();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -28,7 +30,7 @@ const Wages = () => {
       <div className="btn">
         {epf.length > 0 &&
           <div>
-            <PDF3A uan={params.uan} name={epf[0].name} wages={epf[0].wages} employer_share={epf[0].employer_share} />
+            <PDF3A tableData={epf} />
           </div>
         }
         {epf.length > 0 &&
@@ -44,6 +46,7 @@ const Wages = () => {
             <thead>
               <tr>
                 <th>S. No</th>
+                <th>Month</th>
                 <th>UAN No</th>
                 <th>Name</th>
                 <th>Wages</th>
@@ -54,10 +57,11 @@ const Wages = () => {
               {epf.map((item, index) => (
                 <tr key={item.s_no}>
                   <td>{index + 1}</td>
+                  <td>{item.month}</td>
                   <td>{item.uan}</td>
                   <td>{item.name}</td>
                   <td>{item.wages}</td>
-                  <td>{item.employer_share}</td>
+                  <td>{item.epf_diff_amount}</td>
                 </tr>
               ))}
             </tbody>
