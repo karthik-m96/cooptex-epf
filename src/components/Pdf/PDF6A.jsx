@@ -1,6 +1,7 @@
 import React from "react";
 import "./PDF6A.scss";
 import PropTypes from "prop-types"
+import { EpfConstants } from "../../constants/EpfConstants";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -9,9 +10,30 @@ const PDF6A = (props) => {
 
   const { tableData } = props;
   const { name, uan } = tableData[0]
-  const tableDataSource = tableData.map(({years, month,wages, work_share, epf_diff_amount, pen_contr, difference_amount}) => {
-    return [null,month,wages, work_share, epf_diff_amount, pen_contr, difference_amount, pen_contr-difference_amount]
-   });
+  const SummationRow = ["1", "2018"];
+  let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amountAlreadyRemitted = 0;
+  tableData.forEach(({ name, uan, ...rest }) => {
+    const values = Object.values(rest);
+    amountOfWages += rest.wages;
+    workerShare += rest.work_share;
+    epfDiffBtwn += rest.epf_diff_amount;
+    pensionFnd += rest.pen_contr;
+    diffAmt += rest.difference_amount;
+    amountAlreadyRemitted += rest.already_remitted;
+    return [...values, null];
+  });
+  SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, amountAlreadyRemitted, diffAmt]);
+  console.log(SummationRow);
+
+  const pdfData = {
+    accountNumber: `TN/2839/${uan}`,
+    firstName: `${name}`,
+    fileName: `${uan} Form 3A`,
+  };
+
+  let pdfPrintableContent = [];
+
+  const {uan, name} = pdfData
 
   const pdf = {
     content: [
@@ -51,27 +73,26 @@ const PDF6A = (props) => {
         table: {
           body: [
             [
-              { rowSpan: 2, text: "No of Years" },
-              { rowSpan: 2, text: "Year" },
-              { rowSpan: 2, text: "Amount of Wages" },
-              { rowSpan: 2, text: "Workers Share EPF" },
-              { colSpan: 2, text: "Employers Share" },
+              { rowSpan: 2, text: "No of Years", bold: true },
+              { rowSpan: 2, text: "Year", bold: true },
+              { rowSpan: 2, text: "Amount of Wages", bold: true },
+              { rowSpan: 2, text: "Workers Share EPF", bold: true },
+              { colSpan: 2, text: "Employers Share", bold: true },
               "",
-              { rowSpan: 2, text: "Amount already remitted" },
-              { rowSpan: 2, text: "Difference Amount" },
+              { rowSpan: 2, text: "Amount already remitted", bold: true },
+              { rowSpan: 2, text: "Difference Amount", bold: true },
             ],
             [
-              "",
-              "",
-              "",
-              "",
-              "EPF Difference Between 12% and 8.33%",
-              "Pension Fund Contribution 8.33%",
+              null,
+              null,
+              null,
+              null,
+              { text: "EPF Difference Between 12% and 8.33%", bold: true },
+              { text: "Pension Fund Contribution 8.33%", bold: true },
               "",
             ],
             ["", "1", "2", "3 \n2x10/12", "4 (a) \n3-4(b)", "4(b) \n 2 x 8.33%", "5", "6\n4 (b) - 5",],
-            ...tableDataSource,
-
+            SummationRow,
           ],
         },
         margin: [10, 10, 10, 10],

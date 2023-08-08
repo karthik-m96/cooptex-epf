@@ -8,8 +8,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF3A = (props) => {
 
-  const {tableData} = props;
-  const {name, uan} = tableData[0]
+  const { tableData } = props;
+  const { name, uan } = tableData[0]
 
   //TODO: Append the pdf data from props
   const pdfData = {
@@ -21,9 +21,22 @@ const PDF3A = (props) => {
     husbandName: "",
     fileName: `${uan} Form 3A`,
   };
-  const tableDataSource = tableData.map(({month, wages, work_share, epf_diff_amount, pen_contr, difference_amount}) => {
-   return [month, wages, work_share, epf_diff_amount, pen_contr, difference_amount, pen_contr-difference_amount,null]
+  const SummationRow= ["Total"];
+  let amountOfWages = 0,workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0; 
+  const tableDataSource = tableData.map(({ name, uan, ...rest }) => {
+    const values = Object.values(rest);
+    amountOfWages += rest.wages;
+    workerShare += rest.work_share;
+    epfDiffBtwn += rest.epf_diff_amount;
+    pensionFnd += rest.pen_contr;
+    diffAmt += rest.difference_amount;
+    amntAlreadyRemitd += rest.already_remitted;
+    return [...values, null];
   });
+  SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
+  console.log(SummationRow);
+  
+
   let pdfPrintableContent = [];
   const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, fileName } = pdfData;
 
@@ -105,7 +118,8 @@ const PDF3A = (props) => {
         [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
         ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
         ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
-        ...tableDataSource
+        ...tableDataSource,
+        SummationRow,
       ]
     }, margin: [10, 10, 10, 10], alignment: 'center',
   };
@@ -144,7 +158,8 @@ const PDF3A = (props) => {
 export default PDF3A;
 
 PDF3A.propTypes = {
-  tableData : PropTypes.array.isRequired
+  tableData: PropTypes.array.isRequired
 }
 
 // month, wages, work_share, epf_diff_amount, pen_contr, difference_amount
+

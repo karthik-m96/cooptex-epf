@@ -14,7 +14,7 @@ const Wages = () => {
   const getEpf = () => {
     axios.get(`http://localhost:3001/epf/${params.uan}`).then((res) => {
       setEpf(res.data);
-      debugger
+      console.log(res.data);
       console.log(res.data.name)
     });
   };

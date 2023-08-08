@@ -19,13 +19,13 @@ const listener = app.listen(process.env.PORT || 3001, () => {
 });
 
 app.get("/epf/:uan", (req, res) => {
-  const sqlQuery = `SELECT * FROM martojun2018 where uan = '${req.params.uan}'`;
+  const sqlQuery = `CALL epfdata.EPF3A(${req.params.uan})`;
   db.query(sqlQuery, (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Internal Server Error");
     } else { 
-      res.send(result);
+      res.send(result[0]);
     }
   });
 });
