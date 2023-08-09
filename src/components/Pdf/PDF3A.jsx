@@ -21,8 +21,9 @@ const PDF3A = (props) => {
     husbandName: "",
     fileName: `${uan} Form 3A`,
   };
-  const SummationRow= ["Total"];
-  let amountOfWages = 0,workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0; 
+
+  const SummationRow = ["Total"];
+  let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0;
   const tableDataSource = tableData.map(({ name, uan, ...rest }) => {
     const values = Object.values(rest);
     amountOfWages += rest.wages;
@@ -35,7 +36,7 @@ const PDF3A = (props) => {
   });
   SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
   console.log(SummationRow);
-  
+
 
   let pdfPrintableContent = [];
   const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, fileName } = pdfData;
@@ -84,7 +85,7 @@ const PDF3A = (props) => {
           ":",
           "T.N.H.W.C.S.Ltd., (CO-OPTEX) Chennai-8.",
         ],
-        ["5.Statutory Rate of PF Contribution", ":", "10%"],
+        ["5.Statutory Rate of PF Contribution", ":", "12%"],
         [
           "6.Voluntary higher rate of employees Contribution if any",
           ":",
@@ -140,7 +141,7 @@ const PDF3A = (props) => {
 
   //!Create the pdf print object 
   // Collate the styles 
-  const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.FORM3A.styles };
+  const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.styles };
 
   const downloadPdf = () => {
     pdfMake.createPdf(pdfToPrint).download(fileName);
