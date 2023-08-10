@@ -26,7 +26,31 @@ const Wages = () => {
 
   return (
     <div className="wages">
-      <h1>Cooptex EPF</h1>
+      <h1>Cooptex EPF Master</h1>
+      <h3>Data from 1st April 2017 to 31st March 2023</h3>
+
+      <div className="table">
+        {epf.length > 0 &&
+          <table>
+            <thead>
+              <tr>
+                <th>S. No</th>
+                <th>PF No</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {epf.length > 0 && (
+                <tr>
+                  <td>1</td>
+                  <td>{epf[0].uan}</td>
+                  <td>{epf[0].name}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        }
+      </div>
       <div className="btn">
         {epf.length > 0 &&
           <div>
@@ -39,34 +63,6 @@ const Wages = () => {
           </div>
         }
 
-      </div>
-      <div className="table">
-        {epf.length > 0 &&
-          <table>
-            <thead>
-              <tr>
-                <th>S. No</th>
-                <th>Month</th>
-                <th>UAN No</th>
-                <th>Name</th>
-                <th>Wages</th>
-                <th>Employer Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              {epf.map((item, index) => (
-                <tr key={item.s_no}>
-                  <td>{index + 1}</td>
-                  <td>{item.month}</td>
-                  <td>{item.uan}</td>
-                  <td>{item.name}</td>
-                  <td>{item.wages}</td>
-                  <td>{item.epf_diff_amount}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        }
       </div>
     </div>
   );
