@@ -9,6 +9,8 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF6A = (props) => {
 
+  const yearsColumn = [2018, 2019, 2020, 2021, 2022, 2023, 2024]
+
   const { tableData } = props;
   const { name, uan } = tableData[0];
 
@@ -77,7 +79,7 @@ const PDF6A = (props) => {
   let SummationRow = [];
   let TotalSummationRow = [];
   let amountOfWagesSummation = 0, workerShareSummation = 0, epfDiffBtwnSummation = 0, pensionFndSummation = 0, diffAmtSummation = 0, amntAlreadyRemitdSummation = 0;
-  Object.values(yearlyData).forEach((yearData,yearIndex) => {
+  Object.values(yearlyData).forEach((yearData, yearIndex) => {
 
     // !Get the current year data and form the table definition object 
     // !This will create table definition for the current financial year
@@ -101,12 +103,12 @@ const PDF6A = (props) => {
       pensionFndSummation += pensionFnd;
       diffAmtSummation += diffAmt;
       amntAlreadyRemitdSummation += amntAlreadyRemitd;
-        
+
       if (index === yearData.length - 1) {
-        SummationRow.push([(yearIndex+1), year, amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd]);
+        SummationRow.push([(yearIndex + 1), yearsColumn[yearIndex], amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd]);
       }
 
-      
+
     });
 
 
@@ -118,7 +120,7 @@ const PDF6A = (props) => {
   });
 
   //--------------------------------------------------------------
-  
+
   const tableDef = [
     {
       table: {
@@ -167,7 +169,7 @@ const PDF6A = (props) => {
     },
   ];
   pdfPrintableContent.push(...footer);
-      
+
   const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.styles }
 
 

@@ -119,7 +119,7 @@ const PDF3A = (props) => {
 
     // Get the current year data and form the table definition object 
     // This will create table definition for the current financial year
-    let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0;
+    let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, amntAlreadyRemitd = 0, diffAmt = 0;
     let tableDataSource = [];
     let SummationRow = ["Total"];
 
@@ -130,10 +130,10 @@ const PDF3A = (props) => {
       workerShare += rest.work_share;
       epfDiffBtwn += rest.epf_diff_amount;
       pensionFnd += rest.pen_contr;
-      diffAmt += rest.difference_amount;
       amntAlreadyRemitd += rest.already_remitted;
+      diffAmt += rest.difference_amount;
       if (index === yearData.length - 1) {
-        SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
+        SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, amntAlreadyRemitd, diffAmt, null]);
       }
 
     });
@@ -142,7 +142,7 @@ const PDF3A = (props) => {
       {
         table: {
           body: [
-            [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
+            [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Remarks' }],
             ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', '', '', ''],
             ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
             ...tableDataSource,
