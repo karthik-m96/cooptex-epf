@@ -1,10 +1,10 @@
-import React from "react";
+import React, { lazy } from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./Wages.scss";
 import { useParams } from "react-router-dom";
-import PDF3A from "../Pdf/PDF3A";
-import PDF6A from "../Pdf/PDF6A";
+const PDF3A = lazy(() => import("../Pdf/PDF3A"));
+const PDF6A = lazy(() => import("../Pdf/PDF6A"));
 
 const Wages = () => {
   const [epf, setEpf] = useState([]);
@@ -21,7 +21,7 @@ const Wages = () => {
 
   useEffect(() => {
     getEpf();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

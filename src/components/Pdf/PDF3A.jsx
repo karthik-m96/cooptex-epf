@@ -4,147 +4,187 @@ import "./PDF3A.scss"
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import { EpfConstants } from "../../constants/EpfConstants";
+import { groupBy } from "lodash";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
+export const MONTHS = {
+  1: "Jan",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "May",
+  6: "Jun",
+  7: "Jul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
+}
 const PDF3A = (props) => {
 
   const { tableData } = props;
   const { name, uan } = tableData[0]
-
-  //TODO: Append the pdf data from props
-  const pdfData = {
-    periodFrom: "1st April 1995",
-    periodTo: "31st March 1996",
-    accountNumber: `TN/2839/${uan}`,
-    firstName: `${name}`,
-    fatherName: ``,
-    husbandName: "",
-    fileName: `${uan} Form 3A`,
-  };
-
-  const SummationRow = ["Total"];
-  let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0;
-  const tableDataSource = tableData.map(({ name, uan, ...rest }) => {
-    const values = Object.values(rest);
-    amountOfWages += rest.wages;
-    workerShare += rest.work_share;
-    epfDiffBtwn += rest.epf_diff_amount;
-    pensionFnd += rest.pen_contr;
-    diffAmt += rest.difference_amount;
-    amntAlreadyRemitd += rest.already_remitted;
-    return [...values, null];
-  });
-  SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
-  console.log(SummationRow);
-
+  const groupedByTableData = groupBy(tableData, (data) => data.year);
+  const yearlyData = {};
+  for (const year of Object.keys(groupedByTableData)) {
+    const currentYear = groupedByTableData[year];
+    const startMonth = 4;
+    yearlyData[year] = [];
+    currentYear.forEach((monthData) => {
+      if (monthData.month >= startMonth) {
+        yearlyData[year].push(monthData);
+      } else {
+        yearlyData[year - 1]?.push(monthData);
+      }
+    })
+  }
 
   let pdfPrintableContent = [];
-  const { periodFrom, periodTo, accountNumber, fatherName, firstName, husbandName, fileName } = pdfData;
-
-  // !Header Content Definition
-  const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
-  {
-    text: "THE EMPLOYEES' PROVIDENT FUNDS SCHEME, 1952 AND THE EMPLOYEES' PENSION SCHEME, 1995",
-    style: "header",
-  },
-  { text: "(Paras 35 and 42) and [Para 19]", style: "header" }];
-
-  pdfPrintableContent.push(...headerContent);
-
-  // !Define the table header
-  const tableHeader =
-  {
-    style: "tableheader",
-    table: {
-      body: [
-        [
-          { text: "THE PERIOD FROM", style: "tableheader" },
-          {
-            text: `${periodFrom} to ${periodTo}`,
-            style: "tableheader",
-          },
-          { text: "PAGE: 1", style: "tableheader" },
-        ],
-      ],
-    },
-    layout: "noBorders",
-  };
-
-  pdfPrintableContent.push(tableHeader);
-
-  // !Table Sub Header Definition
-  const tableSubHeader = {
-    style: "tablesubheader",
-    table: {
-      body: [
-        ["1.ACCOUNT NO.", ":", `${accountNumber}`],
-        ["2.NAME/SURNAME", ":", `${firstName}`],
-        ["3.Father's or Husband's Name", ":", `${fatherName || husbandName}`],
-        [
-          "4.Name and Address of the Establishment",
-          ":",
-          "T.N.H.W.C.S.Ltd., (CO-OPTEX) Chennai-8.",
-        ],
-        ["5.Statutory Rate of PF Contribution", ":", "12%"],
-        [
-          "6.Voluntary higher rate of employees Contribution if any",
-          ":",
-          "Rs.",
-        ],
-      ],
-    },
-    layout: "noBorders",
-  };
-
-  pdfPrintableContent.push(tableSubHeader);
-
-  // !Sentence Text Above Table
-  const sentenceText = [
+  Object.values(yearlyData).forEach((yearData) => {
+    const first = yearData[0];
+    const [last] = yearData.slice(-1);
+    const periodFrom = `1st ${MONTHS[first.month]} ${first.year}`;
+    const periodTo = `31st ${MONTHS[last.month]} ${last.year}`;
+    // !Header Content Definition
+    const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
     {
-      text: "Certified that the total amount of contribution (both shares) indicated in this CARD, i.e. Rs ........... has already been remitted in full A/c  No.1 and Pension A/c no.10 Rs ...........",
-      style: "sentence",
+      text: "THE EMPLOYEES' PROVIDENT FUNDS SCHEME, 1952 AND THE EMPLOYEES' PENSION SCHEME, 1995",
+      style: "header",
     },
+    { text: "(Paras 35 and 42) and [Para 19]", style: "header" }];
+
+    pdfPrintableContent.push(...headerContent);
+
+    // !Define the table header
+    const tableHeader =
     {
-      text: "Certified that the difference between the total of the contributions shown under columns 3 and 4(b) of the table and that arrived at on the total wages shown in column 2 at the prescribed rate is solely due to the rounded off the contribution to the nearest rupee under rules.",
-      style: "sentence",
-    },
-  ];
-  pdfPrintableContent.push(...sentenceText);
+      style: "tableheader",
+      table: {
+        body: [
+          [
+            { text: "THE PERIOD FROM", style: "tableheader" },
+            {
+              text: `${periodFrom} to ${periodTo}`,
+              style: "tableheader",
+            },
+            { text: "PAGE: 1", style: "tableheader" },
+          ],
+        ],
+      },
+      layout: "noBorders",
+    };
 
-  // !Define table columns and append table data
+    pdfPrintableContent.push(tableHeader);
 
-  const tableDef = {
-    table: {
-      body: [
-        [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
-        ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
-        ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
-        ...tableDataSource,
-        SummationRow,
-      ]
-    }, margin: [10, 10, 10, 10], alignment: 'center',
-  };
+    // !Table Sub Header Definition
+    const tableSubHeader = {
+      style: "tablesubheader",
+      table: {
+        body: [
+          ["1.ACCOUNT NO.", ":", `TN/2839/${uan}`],
+          ["2.NAME/SURNAME", ":", `${name}`],
+          ["3.Father's or Husband's Name", ":", ``],
+          [
+            "4.Name and Address of the Establishment",
+            ":",
+            "T.N.H.W.C.S.Ltd., (CO-OPTEX) Chennai-8.",
+          ],
+          ["5.Statutory Rate of PF Contribution", ":", "12%"],
+          [
+            "6.Voluntary higher rate of employees Contribution if any",
+            ":",
+            "Rs.",
+          ],
+        ],
+      },
+      layout: "noBorders",
+    };
 
-  pdfPrintableContent.push(tableDef);
+    pdfPrintableContent.push(tableSubHeader);
 
-  //!Define Pdf Footer
-  const footer = {
-    table: {
-      body: [
-        [{ text: 'DATE :        /        /   ', margin: [0, 10, 30, 10] }, { text: '(OFFICE SEAL)', margin: [50, 10, 30, 10] }, { text: 'AUTHORISED SIGNATORY', margin: [50, 10, 10, 10] },],
+    // !Sentence Text Above Table
+    const sentenceText = [
+      {
+        text: "Certified that the total amount of contribution (both shares) indicated in this CARD, i.e. Rs ........... has already been remitted in full A/c  No.1 and Pension A/c no.10 Rs ...........",
+        style: "sentence",
+      },
+      {
+        text: "Certified that the difference between the total of the contributions shown under columns 3 and 4(b) of the table and that arrived at on the total wages shown in column 2 at the prescribed rate is solely due to the rounded off the contribution to the nearest rupee under rules.",
+        style: "sentence",
+      },
+    ];
+    pdfPrintableContent.push(...sentenceText);
 
-      ]
-    }, margin: [10, 50, 0, 0], layout: 'noBorders'
-  };
 
-  pdfPrintableContent.push(footer);
+    // Get the current year data and form the table definition object 
+    // This will create table definition for the current financial year
+    let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0;
+    let tableDataSource = [];
+    let SummationRow = ["Total"];
+
+    yearData.forEach((monthData, index) => {
+      const { name, uan, year, month, ...rest } = monthData;
+      tableDataSource.push([`${MONTHS[month]}-${year}`, ...Object.values(rest), null]);
+      amountOfWages += rest.wages;
+      workerShare += rest.work_share;
+      epfDiffBtwn += rest.epf_diff_amount;
+      pensionFnd += rest.pen_contr;
+      diffAmt += rest.difference_amount;
+      amntAlreadyRemitd += rest.already_remitted;
+      if (index === yearData.length - 1) {
+        SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
+      }
+
+    });
+
+    pdfPrintableContent.push(
+      {
+        table: {
+          body: [
+            [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
+            ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', '', '', ''],
+            ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
+            ...tableDataSource,
+            SummationRow,
+          ]
+        }, margin: [10, 10, 10, 10], alignment: 'center',
+      },
+      {
+        table: {
+          body: [
+            [{ text: 'DATE :        /        /   ', margin: [0, 10, 30, 10] }, { text: '(OFFICE SEAL)', margin: [50, 10, 30, 10] }, { text: 'AUTHORISED SIGNATORY', margin: [50, 10, 10, 10] },],
+
+          ]
+        }, margin: [10, 50, 0, 0], layout: 'noBorders', pageBreak: "after",
+      });
+
+  });
+
+  // SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
+
+  // const tableDef = {
+  //   table: {
+  //     body: [
+  //       [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Remarks' }],
+  //       ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', ''],
+  //       ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
+  //       ...tableDataSource,
+  //       SummationRow,
+  //     ]
+  //   }, margin: [10, 10, 10, 10], alignment: 'center', pageBreak: "after",
+  // };
+
+
+
+
 
   //!Create the pdf print object 
   // Collate the styles 
   const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.styles };
 
   const downloadPdf = () => {
-    pdfMake.createPdf(pdfToPrint).download(fileName);
+    pdfMake.createPdf(pdfToPrint).download(`${uan}-FORM3A`);
   };
 
   return (

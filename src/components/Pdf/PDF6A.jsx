@@ -4,39 +4,38 @@ import PropTypes from "prop-types"
 import { EpfConstants } from "../../constants/EpfConstants";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
+import { groupBy } from "lodash";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF6A = (props) => {
 
   const { tableData } = props;
   const { name, uan } = tableData[0];
-  const SummationRow = ["1", "2018"];
 
   const pdfData = {
     accountNumber: `TN/2839/${uan}`,
     firstName: `${name}`,
     fileName: `${uan} Form 6A`,
   };
+  const { firstName, accountNumber, fileName } = pdfData;
+  const groupedByTableData = groupBy(tableData, (data) => data.year);
+  const yearlyData = {};
+  for (const year of Object.keys(groupedByTableData)) {
+    const currentYear = groupedByTableData[year];
+    const startMonth = 4;
+    yearlyData[year] = [];
+    currentYear.forEach((monthData) => {
+      if (monthData.month >= startMonth) {
+        yearlyData[year].push(monthData);
+      } else {
+        yearlyData[year - 1]?.push(monthData);
+      }
+    })
+  }
 
-  let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amountAlreadyRemitted = 0;
-  tableData.forEach(({ name, uan, ...rest }) => {
-    const values = Object.values(rest);
-    amountOfWages += rest.wages;
-    workerShare += rest.work_share;
-    epfDiffBtwn += rest.epf_diff_amount;
-    pensionFnd += rest.pen_contr;
-    diffAmt += rest.difference_amount;
-    amountAlreadyRemitted += rest.already_remitted;
-    return [...values, null];
-  });
-  SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, amountAlreadyRemitted, diffAmt]);
-  console.log(SummationRow);
-
-
+  //-------------------------------------------------------------------------------
 
   let pdfPrintableContent = [];
-
-  const { firstName, accountNumber, fileName } = pdfData;
 
   const headerContent = [{ text: "(FORM 6-A)", style: "header" },
   {
@@ -75,7 +74,51 @@ const PDF6A = (props) => {
   ];
   pdfPrintableContent.push(tableHeader);
 
+  let SummationRow = [];
+  let TotalSummationRow = [];
+  let amountOfWagesSummation = 0, workerShareSummation = 0, epfDiffBtwnSummation = 0, pensionFndSummation = 0, diffAmtSummation = 0, amntAlreadyRemitdSummation = 0;
+  Object.values(yearlyData).forEach((yearData,yearIndex) => {
 
+    // !Get the current year data and form the table definition object 
+    // !This will create table definition for the current financial year
+    let amountOfWages = 0, workerShare = 0, epfDiffBtwn = 0, pensionFnd = 0, diffAmt = 0, amntAlreadyRemitd = 0;
+    yearData.forEach((monthData, index) => {
+      const { name, uan, year, month, ...rest } = monthData;
+      // Summation of all months data w.r.t current year
+      amountOfWages += rest.wages;
+      workerShare += rest.work_share;
+      epfDiffBtwn += rest.epf_diff_amount;
+      pensionFnd += rest.pen_contr;
+      diffAmt += rest.difference_amount;
+      amntAlreadyRemitd += rest.already_remitted;
+
+      // ?Final summation of all the columns respective to each year
+      // ?This is used for the final row which shows summation of all the years
+      amountOfWagesSummation += amountOfWages;
+      workerShareSummation += workerShare;
+      epfDiffBtwnSummation += epfDiffBtwn;
+      epfDiffBtwnSummation += epfDiffBtwn;
+      pensionFndSummation += pensionFnd;
+      diffAmtSummation += diffAmt;
+      amntAlreadyRemitdSummation += amntAlreadyRemitd;
+        
+      if (index === yearData.length - 1) {
+        SummationRow.push([(yearIndex+1), year, amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd]);
+      }
+
+      
+    });
+
+
+    // *After loop exits for the yearly data 
+    // *Check if this is the final index
+    if (yearIndex === Object.values(yearlyData).length - 1) {
+      TotalSummationRow.push(["", "Total", amountOfWagesSummation, workerShareSummation, epfDiffBtwnSummation, pensionFndSummation, diffAmtSummation, amntAlreadyRemitdSummation]);
+    }
+  });
+
+  //--------------------------------------------------------------
+  
   const tableDef = [
     {
       table: {
@@ -100,7 +143,8 @@ const PDF6A = (props) => {
             "",
           ],
           ["", "1", "2", "3 \n2x10/12", "4 (a) \n3-4(b)", "4(b) \n 2 x 8.33%", "5", "6\n4 (b) - 5",],
-          SummationRow,
+          ...SummationRow,
+          ...TotalSummationRow,
         ],
       },
       margin: [10, 10, 10, 10],
@@ -123,7 +167,7 @@ const PDF6A = (props) => {
     },
   ];
   pdfPrintableContent.push(...footer);
-
+      
   const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.styles }
 
 
