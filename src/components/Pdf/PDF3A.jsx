@@ -43,9 +43,8 @@ const PDF3A = (props) => {
   let pdfPrintableContent = [];
   Object.values(yearlyData).forEach((yearData) => {
     const first = yearData[0];
-    const [last] = yearData.slice(-1);
-    const periodFrom = `1st ${MONTHS[first.month]} ${first.year}`;
-    const periodTo = `31st ${MONTHS[last.month]} ${last.year}`;
+    const periodFrom = `1st April ${first.year}`;
+    const periodTo = `31st March ${first.year + 1}`;
     // !Header Content Definition
     const headerContent = [{ text: "(FORM 3-A Revised)", style: "header" },
     {
@@ -57,23 +56,23 @@ const PDF3A = (props) => {
     pdfPrintableContent.push(...headerContent);
 
     // !Define the table header
-    const tableHeader =
+const tableHeader =
     {
-      style: "tableheader",
-      table: {
-        body: [
-          [
-            { text: "THE PERIOD FROM", style: "tableheader" },
-            {
-              text: `${periodFrom} to ${periodTo}`,
-              style: "tableheader",
-            },
+          style: "tableheader",
+          table: {
+            body: [
+              [
+                { text: "THE PERIOD FROM", style: "tableheader" },
+                {
+                  text: `${periodFrom} to ${periodTo}`,
+                  style: "tableheader",
+                },
             { text: "PAGE: 1", style: "tableheader" },
-          ],
-        ],
-      },
-      layout: "noBorders",
-    };
+              ],
+            ],
+          },
+          layout: "noBorders",
+        };
 
     pdfPrintableContent.push(tableHeader);
 
@@ -85,17 +84,9 @@ const PDF3A = (props) => {
           ["1.ACCOUNT NO.", ":", `TN/2839/${uan}`],
           ["2.NAME/SURNAME", ":", `${name}`],
           ["3.Father's or Husband's Name", ":", ``],
-          [
-            "4.Name and Address of the Establishment",
-            ":",
-            "T.N.H.W.C.S.Ltd., (CO-OPTEX) Chennai-8.",
-          ],
+          ["4.Name and Address of the Establishment", ":", "T.N.H.W.C.S.Ltd., (CO-OPTEX) Chennai-8.",],
           ["5.Statutory Rate of PF Contribution", ":", "12%"],
-          [
-            "6.Voluntary higher rate of employees Contribution if any",
-            ":",
-            "Rs.",
-          ],
+          ["6.Voluntary higher rate of employees Contribution if any", ":", "Rs.",],
         ],
       },
       layout: "noBorders",

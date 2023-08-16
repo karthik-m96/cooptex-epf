@@ -78,7 +78,7 @@ const PDF6A = (props) => {
 
   let SummationRow = [];
   let TotalSummationRow = [];
-  let amountOfWagesSummation = 0, workerShareSummation = 0, epfDiffBtwnSummation = 0, pensionFndSummation = 0, diffAmtSummation = 0, amntAlreadyRemitdSummation = 0;
+  let amountOfWagesSummation = 0, workerShareSummation = 0, epfDiffBtwnSummation = 0, pensionFndSummation = 0, amntAlreadyRemitdSummation = 0, diffAmtSummation = 0;
   Object.values(yearlyData).forEach((yearData, yearIndex) => {
 
     // !Get the current year data and form the table definition object 
@@ -91,8 +91,8 @@ const PDF6A = (props) => {
       workerShare += rest.work_share;
       epfDiffBtwn += rest.epf_diff_amount;
       pensionFnd += rest.pen_contr;
-      diffAmt += rest.difference_amount;
       amntAlreadyRemitd += rest.already_remitted;
+      diffAmt += rest.difference_amount;
 
       // ?Final summation of all the columns respective to each year
       // ?This is used for the final row which shows summation of all the years
@@ -101,11 +101,11 @@ const PDF6A = (props) => {
       epfDiffBtwnSummation += epfDiffBtwn;
       epfDiffBtwnSummation += epfDiffBtwn;
       pensionFndSummation += pensionFnd;
-      diffAmtSummation += diffAmt;
       amntAlreadyRemitdSummation += amntAlreadyRemitd;
+      diffAmtSummation += diffAmt;
 
       if (index === yearData.length - 1) {
-        SummationRow.push([(yearIndex + 1), yearsColumn[yearIndex], amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd]);
+        SummationRow.push([(yearIndex + 1), yearsColumn[yearIndex], amountOfWages, workerShare, epfDiffBtwn, pensionFnd, amntAlreadyRemitd, diffAmt]);
       }
 
 
