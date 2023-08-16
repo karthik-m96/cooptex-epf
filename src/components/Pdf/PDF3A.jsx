@@ -67,7 +67,7 @@ const tableHeader =
                   text: `${periodFrom} to ${periodTo}`,
                   style: "tableheader",
                 },
-            { text: "PAGE: 1", style: "tableheader" },
+            { text: "PAGE: ", style: "tableheader" },
               ],
             ],
           },
