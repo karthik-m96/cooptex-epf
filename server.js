@@ -3,8 +3,18 @@ const mysql = require("mysql");
 const cors = require("cors");//Cross-Origin Resource Sharing (CORS). It allows servers to specify who can access their resources and helps prevent cross-origin security issues
 require("dotenv").config(); //used in Node.js to load environment variables from a .env file into the application's environment.
 
+const path = require("path");
+
+const dirname = path.dirname("");
+
+const buildPath = path.join(dirname, "./build");
+
+
+
+
 const app = express(); 
-app.use(express.json());
+app.use(express.static(buildPath));
+// app.use(express.json());
 app.use(cors());
 
 const db = mysql.createConnection({
@@ -17,6 +27,12 @@ const db = mysql.createConnection({
 const listener = app.listen(3001, () => {
   console.log("App is listening on port " + listener.address().port);
 });
+
+app.get("/*", (req,res) => {
+  res.sendFile(path.join(__dirname, "./build/index.html"), (err) => {
+    res.status(500).send(err);
+  })
+})
 
 app.get("/epf/:uan", (req, res) => {
   const sqlQuery = `SELECT * FROM feb2017 where uan = '${req.params.uan}'`;
