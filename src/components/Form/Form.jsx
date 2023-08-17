@@ -11,7 +11,15 @@ const Form = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate(`/epf/${inputData}`);
+  };
 
+  const handleInputChange = (e) => {
+    const value = e.target.value?.trim();
+    if(isNaN(value)) return;
+    //! Use this reg ex if the expression if fully needed
+    // Refer https://stackoverflow.com/questions/61654324/how-to-prevent-user-from-entering-spaces-in-an-input-form-field-in-reactjs
+    // const value = e.target.value?.replace(/\D/g, ""); 
+    setInputData(value);
   };
 
   return (
@@ -25,12 +33,13 @@ const Form = () => {
           <div className="form-uan">
             <label htmlFor="uan">Enter the PF number: </label> <br />
             <input
-              type="text"
               id="uan"
+              key="uan"
               name="uan_no"
+              min={1}
               value={inputData}
               placeholder="PF number to search"
-              onChange={(e) => setInputData(e.target.value)}
+              onChange={handleInputChange}
               required
             />
           </div>

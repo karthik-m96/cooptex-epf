@@ -94,22 +94,29 @@ const PDF6A = (props) => {
       amntAlreadyRemitd += rest.already_remitted;
       diffAmt += rest.difference_amount;
 
-      // ?Final summation of all the columns respective to each year
-      // ?This is used for the final row which shows summation of all the years
-      amountOfWagesSummation += amountOfWages;
-      workerShareSummation += workerShare;
-      epfDiffBtwnSummation += epfDiffBtwn;
-      epfDiffBtwnSummation += epfDiffBtwn;
-      pensionFndSummation += pensionFnd;
-      amntAlreadyRemitdSummation += amntAlreadyRemitd;
-      diffAmtSummation += diffAmt;
-
       if (index === yearData.length - 1) {
+
+        // ?Final summation of all the columns respective to each year
+        // ?This is used for the final row which shows summation of all the years
+        amountOfWagesSummation += amountOfWages;
+        workerShareSummation += workerShare;
+        epfDiffBtwnSummation += epfDiffBtwn;
+        pensionFndSummation += pensionFnd;
+        amntAlreadyRemitdSummation += amntAlreadyRemitd;
+        diffAmtSummation += diffAmt;
+        
         SummationRow.push([(yearIndex + 1), yearsColumn[yearIndex], amountOfWages, workerShare, epfDiffBtwn, pensionFnd, amntAlreadyRemitd, diffAmt]);
       }
-
-
     });
+
+    // console.log(amountOfWagesSummation, "amount of wages");
+    // console.log(workerShareSummation, "workerShare");
+    // console.log(epfDiffBtwnSummation, "epfDiffBtwn");
+    // console.log(pensionFndSummation, "pensionFnd");
+    // console.log(amntAlreadyRemitdSummation, "amntAlreadyRemitd");
+    // console.log(diffAmtSummation, "diffAmt");
+    // console.log("Year", yearIndex);
+    // console.log("\n");
 
 
     // *After loop exits for the yearly data 

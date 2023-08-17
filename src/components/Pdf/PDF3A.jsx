@@ -26,6 +26,7 @@ const PDF3A = (props) => {
   const { tableData } = props;
   const { name, uan } = tableData[0]
   const groupedByTableData = groupBy(tableData, (data) => data.year);
+  console.log(groupedByTableData);;
   const yearlyData = {};
   for (const year of Object.keys(groupedByTableData)) {
     const currentYear = groupedByTableData[year];
@@ -41,7 +42,9 @@ const PDF3A = (props) => {
   }
 
   let pdfPrintableContent = [];
-  Object.values(yearlyData).forEach((yearData) => {
+  Object.values(yearlyData).forEach((yearData, yearIndex) => {
+    const isLastPage = yearIndex === Object.values(yearlyData).length - 1;
+    if (!yearData?.length) return;
     const first = yearData[0];
     const periodFrom = `1st April ${first.year}`;
     const periodTo = `31st March ${first.year + 1}`;
@@ -55,25 +58,23 @@ const PDF3A = (props) => {
 
     pdfPrintableContent.push(...headerContent);
 
-    // !Define the table header
-const tableHeader =
-    {
-          style: "tableheader",
-          table: {
-            body: [
-              [
-                { text: "THE PERIOD FROM", style: "tableheader" },
-                {
-                  text: `${periodFrom} to ${periodTo}`,
-                  style: "tableheader",
-                },
-            { text: "PAGE: ", style: "tableheader" },
-              ],
-            ],
-          },
-          layout: "noBorders",
-        };
 
+    // !Define the table header
+    const tableHeader = {
+      style: "tableheader",
+      table: {
+        body: [
+          [
+            { text: "THE PERIOD FROM", style: "tableheader" },
+            {
+              text: `${periodFrom} to ${periodTo}`,
+              style: "tableheader",
+            },
+          ],
+        ],
+      },
+      layout: "noBorders",
+    };
     pdfPrintableContent.push(tableHeader);
 
     // !Table Sub Header Definition
@@ -145,9 +146,8 @@ const tableHeader =
         table: {
           body: [
             [{ text: 'DATE :        /        /   ', margin: [0, 10, 30, 10] }, { text: '(OFFICE SEAL)', margin: [50, 10, 30, 10] }, { text: 'AUTHORISED SIGNATORY', margin: [50, 10, 10, 10] },],
-
           ]
-        }, margin: [10, 50, 0, 0], layout: 'noBorders', pageBreak: "after",
+        }, margin: [10, 50, 0, 0], layout: 'noBorders', 
       });
 
   });
@@ -166,13 +166,13 @@ const tableHeader =
   //   }, margin: [10, 10, 10, 10], alignment: 'center', pageBreak: "after",
   // };
 
-
-
-
-
   //!Create the pdf print object 
   // Collate the styles 
-  const pdfToPrint = { content: pdfPrintableContent, styles: EpfConstants.styles };
+  const pdfToPrint = {
+    footer: (currentPage) => [{ text: `PAGE: ${currentPage}`, style: "tableheader" }],
+    content: pdfPrintableContent,
+    styles: EpfConstants.styles
+  };
 
   const downloadPdf = () => {
     pdfMake.createPdf(pdfToPrint).download(`${uan}-FORM3A`);
@@ -194,4 +194,3 @@ PDF3A.propTypes = {
 }
 
 // month, wages, work_share, epf_diff_amount, pen_contr, difference_amount
-

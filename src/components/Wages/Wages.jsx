@@ -24,6 +24,7 @@ const Wages = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
   return (
     <div className="wages">
       <h1>Cooptex EPF Master</h1>
