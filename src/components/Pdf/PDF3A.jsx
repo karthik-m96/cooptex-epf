@@ -2,10 +2,8 @@ import React from "react";
 import PropTypes from "prop-types"
 import "./PDF3A.scss"
 import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { EpfConstants } from "../../constants/EpfConstants";
 import { groupBy } from "lodash";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 export const MONTHS = {
   1: "Jan",
@@ -26,7 +24,6 @@ const PDF3A = (props) => {
   const { tableData } = props;
   const { name, uan } = tableData[0]
   const groupedByTableData = groupBy(tableData, (data) => data.year);
-  console.log(groupedByTableData);;
   const yearlyData = {};
   for (const year of Object.keys(groupedByTableData)) {
     const currentYear = groupedByTableData[year];
@@ -43,7 +40,7 @@ const PDF3A = (props) => {
 
   let pdfPrintableContent = [];
   Object.values(yearlyData).forEach((yearData, yearIndex) => {
-    const isLastPage = yearIndex === Object.values(yearlyData).length - 1;
+    // const isLastPage = yearIndex === Object.values(yearlyData).length - 1;
     if (!yearData?.length) return;
     const first = yearData[0];
     const periodFrom = `1st April ${first.year}`;
@@ -136,7 +133,7 @@ const PDF3A = (props) => {
           body: [
             [{ rowSpan: 2, text: 'Month' }, { rowSpan: 2, text: 'Amount of Wages' }, { rowSpan: 2, text: 'Workers Share EPF' }, { colSpan: 2, text: 'Employers Share' }, '', { rowSpan: 2, text: 'Amount already remitted' }, { rowSpan: 2, text: 'Difference Amount' }, { rowSpan: 2, text: 'Remarks' }],
             ['', '', '', 'EPF Difference Between 12% and 8.33%', 'Pension Fund Contribution 8.33%', '', '', ''],
-            ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'],
+            ['1', '2', '3 \n2x10/12', '4 (a) \n3-4(b)', '4(b) \n 2 x 8.33%', '5', '6\n4 (b) - 5', '7'], 
             ...tableDataSource,
             SummationRow,
           ]
@@ -145,11 +142,10 @@ const PDF3A = (props) => {
       {
         table: {
           body: [
-            [{ text: 'DATE :        /        /   ', margin: [0, 10, 30, 10] }, { text: '(OFFICE SEAL)', margin: [50, 10, 30, 10] }, { text: 'AUTHORISED SIGNATORY', margin: [50, 10, 10, 10] },],
+            [{ text: 'DATE :        /        /   ', margin: [0, 20, 30, 10] }, { text: '(OFFICE SEAL)', margin: [50, 20, 30, 10] }, { text: 'AUTHORISED SIGNATORY', margin: [50, 20, 10, 10] },],
           ]
-        }, margin: [10, 50, 0, 0], layout: 'noBorders', 
+        }, margin: [10, 50, 0, 0], layout: 'noBorders', pageBreak: "after"
       });
-
   });
 
   // SummationRow.push(...[amountOfWages, workerShare, epfDiffBtwn, pensionFnd, diffAmt, amntAlreadyRemitd, null]);
@@ -169,7 +165,7 @@ const PDF3A = (props) => {
   //!Create the pdf print object 
   // Collate the styles 
   const pdfToPrint = {
-    footer: (currentPage) => [{ text: `PAGE: ${currentPage}`, style: "tableheader" }],
+    header: (currentPage) => [{ text: `PAGE: ${currentPage}`, style: "tableheader"}],
     content: pdfPrintableContent,
     styles: EpfConstants.styles
   };

@@ -1,21 +1,19 @@
 import "./App.css";
 import Wages from "./components/Wages/Wages";
 import Form from "./components/Form/Form";
-import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import Login from "./components/Login/Login";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import RouteAuth from "./components/Authentication/RouteAuth";
 
 const App = () => {
   const router = createBrowserRouter([
-    { path: "/", element: <Form /> },
+    { path: "/login", element: <Login />, index: true },
+
+    { path: "/", element: <RouteAuth children={<Form />}/>  ,},
     { path: `/epf/:uan`, element: <Wages /> },
+    { path: "*", element: <h1>Page Not Found </h1> },
   ]);
-  return (
-    <RouterProvider router={router}>
-      <div className="App">
-        <Route path="/" element={<Form />} />
-        <Route path="/epf/:uan" element={<Wages />} />
-      </div>
-    </RouterProvider>
-  );
+  return <RouterProvider router={router}></RouterProvider>;
 };
 
 export default App;

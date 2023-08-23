@@ -122,7 +122,7 @@ const PDF6A = (props) => {
     // *After loop exits for the yearly data 
     // *Check if this is the final index
     if (yearIndex === Object.values(yearlyData).length - 1) {
-      TotalSummationRow.push(["", "Total", amountOfWagesSummation, workerShareSummation, epfDiffBtwnSummation, pensionFndSummation, diffAmtSummation, amntAlreadyRemitdSummation]);
+      TotalSummationRow.push(["", "Total", amountOfWagesSummation, workerShareSummation, epfDiffBtwnSummation, pensionFndSummation, amntAlreadyRemitdSummation, diffAmtSummation]);
     }
   });
 
