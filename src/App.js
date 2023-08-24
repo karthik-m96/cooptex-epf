@@ -7,9 +7,9 @@ import RouteAuth from "./components/Authentication/RouteAuth";
 
 const App = () => {
   const router = createBrowserRouter([
-    { path: "/login", element: <Login />, index: true },
+    // { path: "/login", element: <Login />, index: true },
 
-    { path: "/", element: <RouteAuth children={<Form />}/>  ,},
+    { path: "/", index: true, element: <RouteAuth children={<Form />} /> },
     { path: `/epf/:uan`, element: <Wages /> },
     { path: "*", element: <h1>Page Not Found </h1> },
   ]);
