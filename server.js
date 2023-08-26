@@ -15,13 +15,13 @@ app.use(express.json());
 app.use(cors());
 
 const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB,
+  host: process.env.REACT_APP_DB_HOST,
+  user: process.env.REACT_APP_DB_USER,
+  password: process.env.REACT_APP_DB_PASSWORD,
+  database: process.env.REACT_APP_DB,
 });
 
-const listener = app.listen(process.env.PORT || 3001, () => {
+const listener = app.listen(3001, () => {
   console.log("App is listening on port " + listener.address().port);
 });
 
@@ -37,10 +37,10 @@ app.get("/epf/:uan", (req, res) => {
     }
   });
 
-  
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "./build/index.html"), (err) => {
-    res.status(500).send(err);
+  app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "./build/index.html"), (err) => {
+      res.status(500).send(err);
+    });
   });
-});
+
 });
