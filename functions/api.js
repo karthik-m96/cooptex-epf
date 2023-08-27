@@ -27,4 +27,3 @@ router.get("/epf/:uan", (req, res) => {
 
 app.use('/.netlify/functions/api', router);
 module.exports.handler = serverless(app);
-
