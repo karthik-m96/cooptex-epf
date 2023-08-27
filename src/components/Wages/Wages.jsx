@@ -12,7 +12,7 @@ const Wages = () => {
   let params = useParams();
 
   const getEpf = () => {
-    axios.get(`${window.location.origin}/functions/api/epf/${params.uan}`).then((res) => {
+    axios.get(`https://cooptex.online/.netlify/functions/api/epf/${params.uan}`).then((res) => {
       setEpf(res.data);
       console.log(res.data);
       console.log(res.data.name)
