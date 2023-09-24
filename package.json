@@ -12,6 +12,7 @@
     "dotenv": "^16.3.1",
     "lodash": "^4.17.21",
     "mysql": "^2.18.1",
+    "mysql2": "^3.6.1",
     "nodemon": "^3.0.1",
     "pdfmake": "^0.2.7",
     "react": "^18.2.0",
@@ -23,7 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "netlify-lambda serve src",
+    "start": "netlify-lambda serve src ",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
