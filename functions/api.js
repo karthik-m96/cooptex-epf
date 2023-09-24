@@ -5,16 +5,10 @@ const app = express();
 const serverless = require('serverless-http');
 const router = express.Router();
 
-const db = mysql.createConnection({
-  host: process.env.REACT_APP_DB_HOST,
-  user: process.env.REACT_APP_DB_USER,
-  password: process.env.REACT_APP_DB_PASSWORD,
-  database: process.env.REACT_APP_DB,
-});
-
+const db = mysql.createConnection(process.env.DATABASE_URL);
 
 router.get("/epf/:uan", (req, res) => {
-  const sqlQuery = `CALL epfdata.EPF3A(${req.params.uan})`;
+  const sqlQuery = `select * from  2017to2023 where uan=${req.params.uan}`;
   db.query(sqlQuery, (err, result) => {
     if (err) {
       console.log(err);
