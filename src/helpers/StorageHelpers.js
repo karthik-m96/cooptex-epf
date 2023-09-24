@@ -1,7 +1,27 @@
-export const USER_TOKEN_KEY = "user";
-export const JWT_STORAGE_KEY = "JWT_USER_EPF";
+const userNames = JSON.parse(process.env.REACT_APP_USERS) || [];
 
-export const getUser = () =>
-  JSON.parse(sessionStorage?.getItem(USER_TOKEN_KEY));
+export const setUserSession = (data) => {
+  sessionStorage.setItem(`user-data`, JSON.stringify(data));
+};
 
-export const setUser = (value) => sessionStorage?.setItem(USER_TOKEN_KEY, value);
+export const getUserFromSession = () => {
+  const userData = JSON.parse(sessionStorage.getItem(`user-data`));
+  return userData;
+};
+
+export const checkIfValidUserSession = () => {
+  const user = getUserFromSession();
+  return !!user;
+};
+
+export const checkIfValidUser = (username, password) => {
+  if (!userNames || userNames?.length === 0) return false;
+  const [user] = userNames?.filter(
+    (user) => user.name === username && user.password === password
+  );
+  if (!user) return false;
+  const isValidSession = getUserFromSession();
+  if (isValidSession) return true;
+  setUserSession(user);
+  return checkIfValidUserSession();
+};
