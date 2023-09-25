@@ -27,7 +27,7 @@ const Wages = () => {
 
   return (
     <div className="wages">
-      <h1>Cooptex EPF Master</h1>
+      <h1>Co-optex EPF Master</h1>
       <h3>Data from 1st April 2017 to 31st March 2023</h3>
 
       <div className="table">
