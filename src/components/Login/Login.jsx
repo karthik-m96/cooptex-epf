@@ -42,9 +42,6 @@ const Login = () => {
               name="username"
               className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-600"
             />
-            {/* <span className="text-xs tracking-wide text-red-600">
-                Username is required
-              </span> */}
           </div>
           <div className="mt-4">
             <label className="block" htmlFor="password">
