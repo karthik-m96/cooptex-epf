@@ -14,8 +14,6 @@ const Wages = () => {
   const getEpf = () => {
     axios.get(`https://cooptex.online/.netlify/functions/api/epf/${params.uan}`).then((res) => {
       setEpf(res.data);
-      console.log(res.data);
-      console.log(res.data.name)
     });
   };
 
@@ -27,7 +25,7 @@ const Wages = () => {
   return (
     <div className="wages">
       <h1>Co-optex EPF Master</h1>
-      <h3>Data from 1st April 2017 to 31st March 2023</h3>
+      <h3>Data from April, 2017 to July, 2023</h3>
 
       <div className="table">
         {epf.length > 0 &&
