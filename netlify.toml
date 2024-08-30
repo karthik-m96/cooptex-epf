@@ -4,12 +4,14 @@
   status = 200
 
 [[headers]]
-  for = "/"
+  for = "/*"  # Apply to all routes
   [headers.values]
     Access-Control-Allow-Origin = "*"
-  
+    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+
 [build]
-      functions = "functions"
+  functions = "functions"
 
 [dev]
-   publish = "build"
+  publish = "build"
