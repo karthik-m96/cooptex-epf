@@ -6,7 +6,7 @@
 [[headers]]
   for = "/*"  # Apply to all routes
   [headers.values]
-    Access-Control-Allow-Origin = "https://cooptexepf.netlify.app"
+    Access-Control-Allow-Origin = "*"
 
 [build]
   functions = "functions"
