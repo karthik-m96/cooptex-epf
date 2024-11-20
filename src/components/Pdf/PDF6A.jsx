@@ -9,7 +9,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const PDF6A = (props) => {
 
-  const yearsColumn = [2018, 2019, 2020, 2021, 2022, 2023, 2024]
+  const yearsColumn = [2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025]
 
   const { tableData } = props;
   const { name, uan } = tableData[0];
